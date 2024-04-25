@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
-[![R-CMD-check](https://github.com/coolbutuseless/cryptorng-dev/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng-dev/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `{cryptorng}` provides cross-platform [cryptographically secure
@@ -14,7 +14,7 @@ pseudorandom number generators
 (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
 
 A good source of random bytes is essential for generating secure
-encryption inputs like keys, nonces and salts (e.g. for
+encryption inputs like keys and nonces (e.g. for
 [`rmonocypher`](https://github.com/coolbutuseless/rmonocypher)).
 
 The method used for generating random values varies depending on the OS:
@@ -45,9 +45,9 @@ remotes::install_github('coolbutuseless/cryptorng')
 library(cryptorng)
 
 generate_bytes(16)
-#>  [1] 90 3a 1c 82 0c 20 39 c4 e7 ea 2e 77 2c 59 18 60
+#>  [1] a1 59 db 23 3a 7d e8 f8 9a 66 cd e9 4b 7b 9b 93
 generate_bytes(16, type = 'string')
-#> [1] "cb502f2e2797c1233149c6c3340fc46c"
+#> [1] "d9566903e21e715bdb9de965417688b1"
 ```
 
 # C code

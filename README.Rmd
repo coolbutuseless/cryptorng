@@ -19,7 +19,7 @@ library(cryptorng)
 
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
-[![R-CMD-check](https://github.com/coolbutuseless/cryptorng-dev/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng-dev/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `{cryptorng}` provides cross-platform [cryptographically secure pseudorandom number generators (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
