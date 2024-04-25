@@ -13,7 +13,16 @@ Note: if the entropy pool is exhausted on your
 system it may not be able to provide the requested number of bytes -
 in this case an error is thrown.}
 
-\item{type}{Type of returned values - 'raw' or 'string'. Default: 'raw'.
+\item{type}{Type of returned values - 'raw' or 'string'. Default: 'raw'.}
+}
+\value{
+A raw vector or a hexadecimal string
+}
+\description{
+Generate random bytes from the platform-specific cryptographically secure
+pseudorandom number generator
+}
+\section{Platform notes}{
 
 The method used for generating random values varies depending on the 
 operating system (OS):
@@ -25,15 +34,9 @@ operating system (OS):
 }
 
 All these random number generators are internally seeded by the OS using entropy 
-gathered from multiple sources and are considered cryptographically secure.}
+gathered from multiple sources and are considered cryptographically secure.
 }
-\value{
-A raw vector or a hexadecimal string
-}
-\description{
-Generate random bytes from the platform-specific cryptographically secure
-pseudorandom number generator
-}
+
 \examples{
 generate_bytes(16, type = 'string')
 generate_bytes(16, type = 'raw')

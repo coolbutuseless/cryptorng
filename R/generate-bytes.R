@@ -9,6 +9,7 @@
 #'        in this case an error is thrown.
 #' @param type Type of returned values - 'raw' or 'string'. Default: 'raw'.
 #' 
+#' @section Platform notes:
 #' The method used for generating random values varies depending on the 
 #' operating system (OS):
 #'  
