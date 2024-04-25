@@ -26,9 +26,9 @@
 #' 
 #' @export
 #' @examples
-#' generate_bytes(16, type = 'string')
-#' generate_bytes(16, type = 'raw')
+#' rcrypto(16, type = 'string')
+#' rcrypto(16, type = 'raw')
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-generate_bytes <- function(n, type = 'raw') {
-  .Call(generate_bytes_, n, type)
+rcrypto <- function(n, type = 'raw') {
+  .Call(rcrypto_, n, type)
 }

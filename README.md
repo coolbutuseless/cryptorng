@@ -9,7 +9,7 @@
 [![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`{cryptorng}` provides cross-platform [cryptographically secure
+`{cryptorng}` provides access to OS-provided [cryptographically secure
 pseudorandom number generators
 (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
 
@@ -19,15 +19,15 @@ encryption inputs like keys and nonces (e.g. for
 
 The method used for generating random values varies depending on the OS:
 
-| OS           | CSPRNG                     |
-|--------------|----------------------------|
-| macOS, \*BSD | `arc4random_buf()`         |
-| Linux        | `syscall(SYS_getrandom())` |
-| Windows      | `BCryptGenRandom()`        |
+| OS           | CSPRNG                            |
+|--------------|-----------------------------------|
+| macOS, \*BSD | `arc4random_buf()`                |
+| Linux        | `SYS_getrandom()` via `syscall()` |
+| Windows      | `BCryptGenRandom()`               |
 
 All these random number generators are internally seeded by the OS using
-entropy gathered from multiple sources and are considered
-cryptographically secure.
+entropy gathered from multiple sources and use random number algorithms
+which are considered cryptographically secure.
 
 ## Installation
 
@@ -44,10 +44,10 @@ remotes::install_github('coolbutuseless/cryptorng')
 ``` r
 library(cryptorng)
 
-generate_bytes(16)
-#>  [1] a1 59 db 23 3a 7d e8 f8 9a 66 cd e9 4b 7b 9b 93
-generate_bytes(16, type = 'string')
-#> [1] "d9566903e21e715bdb9de965417688b1"
+rcrypto(16)
+#>  [1] 17 37 86 a0 c4 28 40 24 ad 83 2e 8c 7b af f3 39
+rcrypto(16, type = 'string')
+#> [1] "e3405fcc36833ff4761938b3563c7c61"
 ```
 
 # C code
@@ -63,7 +63,7 @@ incorporate/adapt this code into your own project.
     //        it may return fewer bytes than expected. This function throws an 
     //        error in this situation
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    void generate_bytes(void *buf, size_t n) {
+    void rcrypto(void *buf, size_t n) {
       
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       // macOS and BSD support arc4random_buf()
@@ -94,12 +94,12 @@ incorporate/adapt this code into your own project.
       // Linux use 'Sys_getrandom()'
       //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #elif defined(__linux__)
-      size_t status = (size_t)syscall( SYS_getrandom, buf, n, 0 );
+      long status = (long)syscall( SYS_getrandom, buf, n, 0 );
       if (status < 0 || status != n) {
         error("cryptorng_linux() error: Status = %zu.\n", status);
       }
       
     #else
-    #error no secrure random() implemented for this platform
+    #error no secrure rcrypto() implemented for this platform
     #endif 
     }

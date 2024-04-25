@@ -3,11 +3,11 @@
 #include <R.h>
 #include <Rinternals.h>
 
-extern SEXP generate_bytes_(SEXP n_, SEXP type_);
+extern SEXP rcrypto_(SEXP n_, SEXP type_);
 
 static const R_CallMethodDef CEntries[] = {
 
-  {"generate_bytes_", (DL_FUNC) &generate_bytes_, 2},
+  {"rcrypto_", (DL_FUNC) &rcrypto_, 2},
   {NULL , NULL, 0}
 };
 

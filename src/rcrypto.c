@@ -72,7 +72,7 @@ SEXP wrap_bytes_for_return(void *buf, size_t N, SEXP type_) {
 //        it may return fewer bytes than expected. This function throws an 
 //        error in this situation
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void generate_bytes(void *buf, size_t n) {
+void rcrypto(void *buf, size_t n) {
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // macOS and BSD support arc4random_buf()
@@ -103,13 +103,13 @@ void generate_bytes(void *buf, size_t n) {
   // Linux use 'Sys_getrandom()'
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #elif defined(__linux__)
-  size_t status = (size_t)syscall( SYS_getrandom, buf, n, 0 );
+  long status = (long)syscall( SYS_getrandom, buf, n, 0 );
   if (status < 0 || status != n) {
     error("cryptorng_linux() error: Status = %zu.\n", status);
   }
   
 #else
-#error no secrure random() implemented for this platform
+#error no secrure rcrypto() implemented for this platform
 #endif 
 }
 
@@ -120,18 +120,20 @@ void generate_bytes(void *buf, size_t n) {
 // @param n_ number of bytes
 // @param type_ 'raw' or 'string'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP generate_bytes_(SEXP n_, SEXP type_) {
+SEXP rcrypto_(SEXP n_, SEXP type_) {
   
+  if (asInteger(n_) <= 0) {
+    error("rcrypto_(): 'n' must be a positive integer");
+  }
   size_t n = (size_t)asInteger(n_);
-  void *buf = malloc(n);
+  void *buf = R_alloc(n, 1);
   
-  generate_bytes(buf, n);
+  rcrypto(buf, n);
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // Wrap bytes for R and return
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   SEXP res_ = PROTECT(wrap_bytes_for_return(buf, n, type_));
-  free(buf);
   UNPROTECT(1);
   return res_;
 }
