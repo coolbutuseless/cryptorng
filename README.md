@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `{cryptorng}` Generate random bytes from cryptographically secure random number sources
+# `{cryptorng}` Generate random bytes from your OS cryptographically secure RNG
 
 <!-- badges: start -->
 
@@ -13,21 +13,42 @@
 pseudorandom number generators
 (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
 
-A good source of random bytes is essential for generating secure
-encryption inputs like keys and nonces (e.g. for
-[`rmonocypher`](https://github.com/coolbutuseless/rmonocypher)).
+**Summary:** OS-provided CSPRNGs provide high-quality random bytes.
 
-The method used for generating random values varies depending on the OS:
+These bytes are suitable for use in other crypographic processes e.g.
 
-| OS           | CSPRNG                            |
-|--------------|-----------------------------------|
-| macOS, \*BSD | `arc4random_buf()`                |
-| Linux        | `SYS_getrandom()` via `syscall()` |
-| Windows      | `BCryptGenRandom()`               |
+- seeding another random number generator
+- as keys, seeds, nonces, salts etc for other
+- generating an encryption key.
 
-All these random number generators are internally seeded by the OS using
-entropy gathered from multiple sources and use random number algorithms
-which are considered cryptographically secure.
+``` r
+library(cryptorng)
+
+# Generate random bytes
+rcrypto(16)
+```
+
+    #>  [1] 91 06 5a 61 38 75 db fa 0f 8d 8f cf 54 57 e1 09
+
+``` r
+rcrypto(16, type = 'string')
+```
+
+    #> [1] "4b8f4a386eaa0ae12b8d9a9eb5b3047e"
+
+``` r
+# Generate some random integers  (Beware of NAs using this approach)
+N <- 5
+rand_ints <- na.omit(readBin(rcrypto(N * 4), integer(), N))
+rand_ints
+```
+
+    #> [1] 1467300025  582430056 -792231472   88556227  902676152
+
+``` r
+# Seed the standard R random number generator
+set.seed(rand_ints[1])
+```
 
 ## Installation
 
@@ -39,21 +60,51 @@ You can install from
 remotes::install_github('coolbutuseless/cryptorng')
 ```
 
-## Generate random bytes
+## Technical bits
 
-``` r
-library(cryptorng)
+Major operating systems (e.g. macOS, Linux, Windows) now come with
+CSPRNG functionality built-in.  
+These RNGs (Random Number Generators) are cryptographically secure -
+meaning that
 
-rcrypto(16)
-#>  [1] 17 37 86 a0 c4 28 40 24 ad 83 2e 8c 7b af f3 39
-rcrypto(16, type = 'string')
-#> [1] "e3405fcc36833ff4761938b3563c7c61"
-```
+- bytes generated pass statistical randomness tests
+- it is impossible to reconstruct the prior stream of numbers if the
+  current internal state of the RNG is revealed
 
-# C code
+These are still only **pseudo**-random number generators though, as the
+production of numbers is deterministic given the seed. So a high entropy
+seed which is kept secret is considered standard practice.
+
+For these OS-provided CSPRNGs, the entropy (and the seeding) is provided
+by the OS itself - using such things as hardware RNGs, timing jitter,
+network traffic, disk activity. The initial seed is never revealed to
+the user, and
+[*reseeding*](https://en.wikipedia.org/wiki//dev/random#BSD_systems) may
+take place to ensure that additional entropy is used when available.
+
+The C function for generating random values varies depending on the OS:
+
+| OS           | CSPRNG                            |
+|--------------|-----------------------------------|
+| macOS, \*BSD | `arc4random_buf()`                |
+| Linux        | `SYS_getrandom()` via `syscall()` |
+| Windows      | `BCryptGenRandom()`               |
+
+All of these random number generators are internally seeded by the OS
+using entropy gathered from multiple sources and use random number
+algorithms which are considered cryptographically secure.
+
+## C code
 
 This package and code is MIT licensed. Please feel free to
 incorporate/adapt this code into your own project.
+
+The following is a snapshot of the core function which calls the
+appropriate CSPRNG for your system.
+
+Note: If your system is not supported, please open an
+[issue](https://github.com/coolbutuseless/cryptorng/issues) with
+information on your systems CSPRNG and/or `/dev/random` information.
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Get random bytes from the system RNG  (C Callable)
