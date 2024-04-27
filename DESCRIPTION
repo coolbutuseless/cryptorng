@@ -1,7 +1,7 @@
 Package: cryptorng
 Type: Package
 Title: Access System Cryptographic Pseudorandom Number Generators
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person("Mike", "Cheng", role = c("aut", "cre", 'cph'), email = "mikefc@coolbutuseless.com")
     )
@@ -9,9 +9,10 @@ Maintainer: Mike Cheng <mikefc@coolbutuseless.com>
 Description: Generate random bytes from the Cryptographically Secure Pseudorandom 
     Number Generator (CSPRNG) provided by the underlying operating system.  
     These system CSPRNGs are seeded internally by the OS with entropy it gathers
-    and use random number generation algorithms which are considered cryptographically secure.  
-    On macOS and BSD systems arc4random_buf is used; Windows uses
-    BCryptgenRandom; and Linux uses Sys_getrandom.
+    and use random number generation algorithms which are considered 
+    cryptographically secure.  The following system functions are used:
+    arc4random_buf() on macOS and BSD; BCryptgenRandom() on Windows; 
+    Sys_getrandom() on Linux.
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.1
