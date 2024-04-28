@@ -18,8 +18,14 @@ pseudorandom number generators
 These bytes are suitable for use in other crypographic processes e.g.
 
 - seeding another random number generator
-- as keys, seeds, nonces, salts etc for other
-- generating an encryption key.
+- as keys, seeds, nonces, salts etc for encryption
+
+#### What sets `{cryptorng}` apart from other RNGs in R?
+
+These bytes are as random as you’re going to get on general-purpose PCs
+which don’t have a hardware RNG. There’s no seed to set (the OS sets
+that internally using accumulated system entropy), and multiple threads
+in parallel won’t read the same bytes.
 
 ``` r
 library(cryptorng)
@@ -28,13 +34,13 @@ library(cryptorng)
 rcrypto(16)
 ```
 
-    #>  [1] 91 06 5a 61 38 75 db fa 0f 8d 8f cf 54 57 e1 09
+    #>  [1] e1 fa fd 67 9d a3 cb ab 75 63 f3 76 b6 2b 37 04
 
 ``` r
 rcrypto(16, type = 'string')
 ```
 
-    #> [1] "4b8f4a386eaa0ae12b8d9a9eb5b3047e"
+    #> [1] "97153c7d7a2c9ea5f815fb39a3464734"
 
 ``` r
 # Generate some random integers  (Beware of NAs using this approach)
@@ -43,7 +49,7 @@ rand_ints <- na.omit(readBin(rcrypto(N * 4), integer(), N))
 rand_ints
 ```
 
-    #> [1] 1467300025  582430056 -792231472   88556227  902676152
+    #> [1] -1230414258  -982718066   172419352 -1072995015  1358731491
 
 ``` r
 # Seed the standard R random number generator
@@ -84,11 +90,11 @@ take place to ensure that additional entropy is used when available.
 
 The C function for generating random values varies depending on the OS:
 
-| OS           | CSPRNG                            |
-|--------------|-----------------------------------|
-| macOS, \*BSD | `arc4random_buf()`                |
-| Linux        | `SYS_getrandom()` via `syscall()` |
-| Windows      | `BCryptGenRandom()`               |
+| OS           | CSPRNG                            | Notes                                                                                                   |
+|--------------|-----------------------------------|---------------------------------------------------------------------------------------------------------|
+| macOS, \*BSD | `arc4random_buf()`                | macOS [arc4rand.c](http://www.opensource.apple.com/source/Libc/Libc-1044.10.1/gen/FreeBSD/arc4random.c) |
+| Linux        | `SYS_getrandom()` via `syscall()` |                                                                                                         |
+| Windows      | `BCryptGenRandom()`               |                                                                                                         |
 
 All of these random number generators are internally seeded by the OS
 using entropy gathered from multiple sources and use random number
