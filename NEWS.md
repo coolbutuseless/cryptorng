@@ -1,5 +1,11 @@
 
-# cryptorng 0.1.1  2024-04-28
+# cryptorng 0.1.3  2024-04-29
+
+* Added
+    * `rcrypt_unif()` for uniform random numbers in the range [0, 1]
+    * `rcyprt_int()` for random R integers (which may include `NA`)
+
+# cryptorng 0.1.2  2024-04-28
 
 * Fixes for CRAN
     * Reintroduce `()` for functions in `DESCRIPTION`

@@ -32,3 +32,47 @@
 rcrypto <- function(n, type = 'raw') {
   .Call(rcrypto_, n, type)
 }
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Generate uniform random floating point numbers in the range [0, 1] using the 
+#' platform-specific cryptographically secure pseudorandom number generator
+#' 
+#' @param n Number of random values to generate.
+#'        Note: if the entropy pool is exhausted on your
+#'        system it may not be able to provide the requested number of bytes -
+#'        in this case an error is thrown.
+#' 
+#' @return A numeric vector of double precision floating point values in the 
+#'         range [0, 1].  Note: this function never returns \code{NA} values.
+#' 
+#' @export
+#' @examples
+#' rcrypto_unif(16)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+rcrypto_unif <- function(n) {
+  .Call(rcrypto_unif_, n)
+}
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Generate random R integers in the range [0, 1] using the 
+#' platform-specific cryptographically secure pseudorandom number generator
+#' 
+#' @param n Number of random integers to generate.
+#'        Note: if the entropy pool is exhausted on your
+#'        system it may not be able to provide the requested number of bytes -
+#'        in this case an error is thrown.
+#' 
+#' @return An integer vector.  Note: this function may return \code{NA} values
+#'         (with a very low probability).  Users are advised to use \code{na.omit()}
+#'         (or similar) to remove \code{NA} values if not needed.
+#' 
+#' @export
+#' @examples
+#' rcrypto_int(16)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+rcrypto_int <- function(n) {
+  .Call(rcrypto_int_, n)
+}
