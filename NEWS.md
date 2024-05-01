@@ -3,7 +3,7 @@
 
 * Added
     * `rcrypt_unif()` for uniform random numbers in the range [0, 1]
-    * `rcyprt_int()` for random R integers (which may include `NA`)
+    * `rcyprt_int()` for random R integers 
 
 # cryptorng 0.1.2  2024-04-28
 

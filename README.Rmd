@@ -48,15 +48,15 @@ rcrypto(16, type = 'string')
 
 
 # Generate uniform random numbers in the range [0, 1]
-# This function will not generate NA values
+# This function does not generate NA values
 rcrypto_unif(5)
 
 # Generate some random integers. 
-# This function may generate `NA_integer_` value with prob = 1/(2^32 - 1)
+# This function dose not generate NA values
 rcrypto_int(5)
 
 # Seed the standard R random number generator
-set.seed(na.omit(rcrypto_int(5)))
+set.seed(rcrypto_int(5))
 ```
 
 

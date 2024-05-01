@@ -34,33 +34,33 @@ library(cryptorng)
 rcrypto(16)
 ```
 
-    #>  [1] 13 36 77 f7 ea e2 d5 ce 26 3d c8 47 05 fc 32 c3
+    #>  [1] 97 42 40 16 af 40 ac 37 ea 1e e5 26 f4 c2 d4 92
 
 ``` r
 rcrypto(16, type = 'string')
 ```
 
-    #> [1] "cf35c778abdbe0db4ec37a0085b31e49"
+    #> [1] "8f4624858d748b37785cf5b170169319"
 
 ``` r
 # Generate uniform random numbers in the range [0, 1]
-# This function will not generate NA values
+# This function does not generate NA values
 rcrypto_unif(5)
 ```
 
-    #> [1] 0.857423780 0.032205318 0.681364680 0.937281090 0.003177101
+    #> [1] 0.66273988 0.60932209 0.94762338 0.56791628 0.07343798
 
 ``` r
 # Generate some random integers. 
-# This function may generate `NA_integer_` value with prob = 1/(2^32 - 1)
+# This function dose not generate NA values
 rcrypto_int(5)
 ```
 
-    #> [1] -1398485379  -333353733   988005220   236221172   288517735
+    #> [1]  -663423129  1205202332  -420409181 -1482573832 -1686519074
 
 ``` r
 # Seed the standard R random number generator
-set.seed(na.omit(rcrypto_int(5)))
+set.seed(rcrypto_int(5))
 ```
 
 ## Installation
