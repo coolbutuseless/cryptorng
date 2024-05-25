@@ -19,6 +19,7 @@ library(cryptorng)
 
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
+[![CRAN](http://www.r-pkg.org/badges/version/cryptorng)](https://cran.r-project.org/package=cryptorng)
 [![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -33,40 +34,49 @@ These bytes are suitable for use in other crypographic processes e.g.
 
 #### What sets `{cryptorng}` apart from other RNGs in R?
 
-These bytes are as random as you're going to get on general-purpose PCs
-which don't have a hardware RNG.  There's no seed to set (the OS sets that internally using 
-accumulated system entropy), and multiple threads in parallel won't read
-the same bytes.
+* These numbers are as random as you're going to get on general-purpose PCs
+which don't have specialist RNG hardware.  
+* There's no seed to set (the OS sets that internally using 
+accumulated system entropy)
+* Multiple threads in parallel won't read the same bytes.
 
 
 ```{r example}
 library(cryptorng)
-
-# Generate random bytes
+# cryptographically random uniform random bytes
 rcrypto(16)
-rcrypto(16, type = 'string')
-
-
-# Generate uniform random numbers in the range [0, 1]
-# This function does not generate NA values
-rcrypto_unif(5)
-
-# Generate some random integers. 
-# This function dose not generate NA values
-rcrypto_int(5)
-
-# Seed the standard R random number generator
-set.seed(rcrypto_int(5))
+# cryptographically random uniform random bytes as a hexadecimal string
+rcrypto(16, type = 'chr')
+# cryptographically random logical values
+rcrypto(16, type = 'lgl')
+# cryptographically random uniform random integers
+rcrypto(16, type = 'int')
+# cryptographically random uniform random doubles in the range [0, 1]
+rcrypto(16, type = 'dbl')
 ```
+
+
 
 
 ## Installation
 
-You can install from [GitHub](https://github.com/coolbutuseless/cryptorng) with:
+This package can be installed from CRAN
 
 ``` r
-# install.package('remotes')
+install.packages('cryptorng')
+```
+
+You can install the latest development version from [GitHub](https://github.com/coolbutuseless/cryptorng) with:
+
+``` r
+# install.packages('remotes')
 remotes::install_github('coolbutuseless/cryptorng')
+```
+
+Pre-built source/binary versions can also be installed from [R-universe](https://r-universe.dev)
+
+``` r
+install.packages('cryptorng', repos = c('https://coolbutuseless.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 

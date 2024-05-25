@@ -6,10 +6,10 @@ Authors@R: c(
     person("Mike", "Cheng", role = c("aut", "cre", 'cph'), email = "mikefc@coolbutuseless.com")
     )
 Maintainer: Mike Cheng <mikefc@coolbutuseless.com>
-Description: Generate random bytes from the Cryptographically Secure Pseudorandom 
+Description: Generate random numbers from the Cryptographically Secure Pseudorandom 
     Number Generator (CSPRNG) provided by the underlying operating system.  
     These system CSPRNGs are seeded internally by the OS with entropy it gathers
-    and use random number generation algorithms which are considered 
+    from the system hardware. The random number generation algorithms are considered 
     cryptographically secure.  The following system functions are used:
     arc4random_buf() on macOS and BSD; BCryptgenRandom() on Windows; 
     Sys_getrandom() on Linux.

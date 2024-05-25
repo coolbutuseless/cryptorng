@@ -40,29 +40,6 @@ char *bytes_to_hex(uint8_t *buf, size_t len) {
   return str;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Pack bytes for return
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP wrap_bytes_for_return(void *buf, size_t N, SEXP type_) {
-  
-  SEXP res_ = R_NilValue;
-  
-  const char *type = CHAR(STRING_ELT(type_, 0));
-  
-  if (strcmp(type, "raw") == 0) {
-    res_ = PROTECT(allocVector(RAWSXP, (R_xlen_t)N));
-    memcpy(RAW(res_), buf, N);
-  } else {
-    char *hex = bytes_to_hex(buf, N);
-    res_ = PROTECT(allocVector(STRSXP, 1));
-    SET_STRING_ELT(res_, 0, mkChar(hex));
-    free(hex);
-  }
-  
-  UNPROTECT(1);
-  return res_;
-}
-
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get random bytes from the system RNG  (C Callable)
@@ -116,11 +93,27 @@ void rcrypto(void *buf, size_t n) {
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get random bytes from the system RNG  (R Callable)
-//
-// @param n_ number of bytes
-// @param type_ 'raw' or 'string'
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP rcrypto_(SEXP n_, SEXP type_) {
+SEXP rcrypto_raw_(SEXP n_, SEXP type_) {
+  
+  if (asInteger(n_) <= 0) {
+    error("rcrypto_(): 'n' must be a positive integer");
+  }
+  size_t n = (size_t)asInteger(n_);
+  SEXP res_ = PROTECT(allocVector(RAWSXP, (R_xlen_t)n));
+  
+  rcrypto(RAW(res_), n);
+  
+  UNPROTECT(1);
+  return res_;
+}
+
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Get random bytes from the system RNG as hexadecimal string
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SEXP rcrypto_chr_(SEXP n_, SEXP type_) {
   
   if (asInteger(n_) <= 0) {
     error("rcrypto_(): 'n' must be a positive integer");
@@ -133,38 +126,42 @@ SEXP rcrypto_(SEXP n_, SEXP type_) {
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   // Wrap bytes for R and return
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  SEXP res_ = PROTECT(wrap_bytes_for_return(buf, n, type_));
+  SEXP res_ = R_NilValue;
+  
+  char *hex = bytes_to_hex(buf, n);
+  res_ = PROTECT(allocVector(STRSXP, 1));
+  SET_STRING_ELT(res_, 0, mkChar(hex));
+  free(hex);
+    
   UNPROTECT(1);
   return res_;
 }
 
 
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Get random floats in the range [0, 1]
-//
-// @param n_ number of bytes
+// Get random bytes from the system RNG  as logical values
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP rcrypto_unif_(SEXP n_) {
+SEXP rcrypto_lgl_(SEXP n_, SEXP type_) {
   
   if (asInteger(n_) <= 0) {
     error("rcrypto_(): 'n' must be a positive integer");
   }
   size_t n = (size_t)asInteger(n_);
-  SEXP res_ = PROTECT(allocVector(REALSXP, (R_xlen_t)n));
-  double *dptr = REAL(res_);
-  uint64_t *iptr = (uint64_t *)dptr;
+  uint8_t *buf = (uint8_t *)R_alloc(n, 1);
   
-  rcrypto((void *)dptr, n * sizeof(double));
+  rcrypto(buf, n);
   
-  // Convert 64-bit unsigned integer to double in range [0, 1]
-  // Like xoroshiro does: https://prng.di.unimi.it/
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // Wrap bytes for R and return
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  SEXP res_ = PROTECT(allocVector(LGLSXP, (R_xlen_t)n));
+  
+  int32_t *ptr = LOGICAL(res_);
   for (size_t i = 0; i < n; i++) {
-    dptr[i] = (double)(iptr[i] >> 11) * 0x1.0p-53;
-  }
-  
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // tidy and return
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ptr[i] = buf[i] > 127;
+  }  
+
   UNPROTECT(1);
   return res_;
 }
@@ -172,14 +169,14 @@ SEXP rcrypto_unif_(SEXP n_) {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Get random floats in the range [0, 1]
+// Get random int32_t 
 //
-// @param n_ number of bytes
+// @param n_ number of integers
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 SEXP rcrypto_int_(SEXP n_) {
   
   if (asInteger(n_) <= 0) {
-    error("rcrypto_(): 'n' must be a positive integer");
+    error("rcrypto_int_(): 'n' must be a positive integer");
   }
   size_t n = (size_t)asInteger(n_);
   SEXP res_ = PROTECT(allocVector(INTSXP, (R_xlen_t)n));
@@ -194,6 +191,37 @@ SEXP rcrypto_int_(SEXP n_) {
     while (ptr[i] == NA_INTEGER) {
       rcrypto((void *)(ptr + i), 1 * sizeof(int));
     }
+  }
+  
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // tidy and return
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  UNPROTECT(1);
+  return res_;
+}
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Get random floats in the range [0, 1]
+//
+// @param n_ number of floats
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SEXP rcrypto_dbl_(SEXP n_) {
+  
+  if (asInteger(n_) <= 0) {
+    error("rcrypto_unif_(): 'n' must be a positive integer");
+  }
+  size_t n = (size_t)asInteger(n_);
+  SEXP res_ = PROTECT(allocVector(REALSXP, (R_xlen_t)n));
+  double *dptr = REAL(res_);
+  uint64_t *iptr = (uint64_t *)dptr;
+  
+  rcrypto((void *)dptr, n * sizeof(double));
+  
+  // Convert 64-bit unsigned integer to double in range [0, 1]
+  // Like xoroshiro does: https://prng.di.unimi.it/
+  for (size_t i = 0; i < n; i++) {
+    dptr[i] = (double)(iptr[i] >> 11) * 0x1.0p-53;
   }
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

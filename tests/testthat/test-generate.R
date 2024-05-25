@@ -11,8 +11,8 @@ test_that("rcrypto works works", {
   
   
   
-  r1 <- rcrypto(32, type = 'string')
-  r2 <- rcrypto(32, type = 'string')
+  r1 <- rcrypto(32, type = 'chr')
+  r2 <- rcrypto(32, type = 'chr')
   
   expect_true(is.character(r1))
   expect_true(length(r1) == 1)
@@ -31,8 +31,8 @@ test_that("n is checked for sanity", {
 
 
 test_that("rcrypto_unif() works works", {
-  r1 <- rcrypto_unif(32)
-  r2 <- rcrypto_unif(32)
+  r1 <- rcrypto(32, 'dbl')
+  r2 <- rcrypto(32, 'dbl')
   
   expect_true(is.double(r1))
   expect_true(length(r1) == 32)
@@ -41,8 +41,8 @@ test_that("rcrypto_unif() works works", {
 
 
 test_that("rcrypto_int() works works", {
-  r1 <- rcrypto_int(32)
-  r2 <- rcrypto_int(32)
+  r1 <- rcrypto(32, 'int')
+  r2 <- rcrypto(32, 'int')
   
   expect_true(is.integer(r1))
   expect_true(length(r1) == 32)

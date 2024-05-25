@@ -3,15 +3,19 @@
 #include <R.h>
 #include <Rinternals.h>
 
-extern SEXP rcrypto_(SEXP n_, SEXP type_);
-extern SEXP rcrypto_unif_(SEXP n_);
+extern SEXP rcrypto_raw_(SEXP n_);
+extern SEXP rcrypto_chr_(SEXP n_);
+extern SEXP rcrypto_lgl_(SEXP n_);
 extern SEXP rcrypto_int_(SEXP n_);
+extern SEXP rcrypto_dbl_(SEXP n_);
 
 static const R_CallMethodDef CEntries[] = {
   
-  {"rcrypto_", (DL_FUNC) &rcrypto_, 2},
-  {"rcrypto_unif_", (DL_FUNC) &rcrypto_unif_, 1},
+  {"rcrypto_raw_", (DL_FUNC) &rcrypto_raw_, 1},
+  {"rcrypto_chr_", (DL_FUNC) &rcrypto_chr_, 1},
+  {"rcrypto_lgl_", (DL_FUNC) &rcrypto_lgl_, 1},
   {"rcrypto_int_", (DL_FUNC) &rcrypto_int_, 1},
+  {"rcrypto_dbl_", (DL_FUNC) &rcrypto_dbl_, 1},
   {NULL , NULL, 0}
 };
 

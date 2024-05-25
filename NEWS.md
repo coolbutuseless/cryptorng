@@ -1,9 +1,12 @@
 
-# cryptorng 0.1.3  2024-04-29
+# cryptorng 0.1.3  2024-05-25
 
-* Added
-    * `rcrypt_unif()` for uniform random numbers in the range [0, 1]
-    * `rcyprt_int()` for random R integers 
+* `rcrypto()` now supports more return types:
+    * `raw` raw vector of bytes
+    * `chr` hexadecimal string
+    * `lgl` random logical values
+    * `int` uniform random integers
+    * `dbl` uniform random doubles in the range [0, 1]
 
 # cryptorng 0.1.2  2024-04-28
 

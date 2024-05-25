@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/cool-useless-green.svg)
+[![CRAN](http://www.r-pkg.org/badges/version/cryptorng)](https://cran.r-project.org/package=cryptorng)
 [![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -22,55 +23,74 @@ These bytes are suitable for use in other crypographic processes e.g.
 
 #### What sets `{cryptorng}` apart from other RNGs in R?
 
-These bytes are as random as you’re going to get on general-purpose PCs
-which don’t have a hardware RNG. There’s no seed to set (the OS sets
-that internally using accumulated system entropy), and multiple threads
-in parallel won’t read the same bytes.
+- These numbers are as random as you’re going to get on general-purpose
+  PCs which don’t have specialist RNG hardware.  
+- There’s no seed to set (the OS sets that internally using accumulated
+  system entropy)
+- Multiple threads in parallel won’t read the same bytes.
 
 ``` r
 library(cryptorng)
-
-# Generate random bytes
+# cryptographically random uniform random bytes
 rcrypto(16)
 ```
 
-    #>  [1] 97 42 40 16 af 40 ac 37 ea 1e e5 26 f4 c2 d4 92
+    #>  [1] 14 52 2c 66 1b 35 b7 83 e3 a2 f5 36 77 bf 59 1a
 
 ``` r
-rcrypto(16, type = 'string')
+# cryptographically random uniform random bytes as a hexadecimal string
+rcrypto(16, type = 'chr')
 ```
 
-    #> [1] "8f4624858d748b37785cf5b170169319"
+    #> [1] "85fb1f88a0c8ead27b1680b5b3c14f1a"
 
 ``` r
-# Generate uniform random numbers in the range [0, 1]
-# This function does not generate NA values
-rcrypto_unif(5)
+# cryptographically random logical values
+rcrypto(16, type = 'lgl')
 ```
 
-    #> [1] 0.66273988 0.60932209 0.94762338 0.56791628 0.07343798
+    #>  [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE
+    #> [13] FALSE  TRUE  TRUE  TRUE
 
 ``` r
-# Generate some random integers. 
-# This function dose not generate NA values
-rcrypto_int(5)
+# cryptographically random uniform random integers
+rcrypto(16, type = 'int')
 ```
 
-    #> [1]  -663423129  1205202332  -420409181 -1482573832 -1686519074
+    #>  [1]  -921500885  1699045642 -1757214437   162988660  1881853527  -455888035
+    #>  [7] -1147275280   -32980123  -613675724 -1318587285   200376975 -1976661872
+    #> [13] -1295291376 -2040368678   548665066   799597105
 
 ``` r
-# Seed the standard R random number generator
-set.seed(rcrypto_int(5))
+# cryptographically random uniform random doubles in the range [0, 1]
+rcrypto(16, type = 'dbl')
 ```
+
+    #>  [1] 0.9817417 0.1332365 0.2227557 0.9046320 0.4403960 0.7514096 0.7229504
+    #>  [8] 0.7272749 0.4014156 0.5157457 0.9635036 0.8342329 0.9370813 0.5226229
+    #> [15] 0.3949592 0.1755212
 
 ## Installation
 
-You can install from
+This package can be installed from CRAN
+
+``` r
+install.packages('cryptorng')
+```
+
+You can install the latest development version from
 [GitHub](https://github.com/coolbutuseless/cryptorng) with:
 
 ``` r
-# install.package('remotes')
+# install.packages('remotes')
 remotes::install_github('coolbutuseless/cryptorng')
+```
+
+Pre-built source/binary versions can also be installed from
+[R-universe](https://r-universe.dev)
+
+``` r
+install.packages('cryptorng', repos = c('https://coolbutuseless.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Technical bits
