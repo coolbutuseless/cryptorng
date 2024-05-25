@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 library(cryptorng)
 ```
 
-# `{cryptorng}` Generate random bytes from your OS cryptographically secure RNG
+# Generate random numbers from your OS cryptographically secure RNG
 
 <!-- badges: start -->
 ![](https://img.shields.io/badge/cool-useless-green.svg)
@@ -23,9 +23,9 @@ library(cryptorng)
 [![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`{cryptorng}` provides access to OS-provided [cryptographically secure pseudorandom number generators (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
+`{cryptorng}` provides access to your operating system's [cryptographically secure pseudorandom number generator (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
 
-**Summary:** OS-provided CSPRNGs provide high-quality random bytes. 
+System CSPRNGs provide high-quality, uniform random bytes which are secure against cryptographic analysis.
 
 These bytes are suitable for use in other crypographic processes e.g.
 
@@ -38,20 +38,23 @@ These bytes are suitable for use in other crypographic processes e.g.
 which don't have specialist RNG hardware.  
 * There's no seed to set (the OS sets that internally using 
 accumulated system entropy)
+    * Depending on your system, the CSPRNG may be continually re-seeded as more 
+      entropy becomes available. 
 * Multiple threads in parallel won't read the same bytes.
 
+#### How can I generate random values sampled from a uniform distribution?
 
 ```{r example}
 library(cryptorng)
-# cryptographically random uniform random bytes
+# uniform random bytes
 rcrypto(16)
-# cryptographically random uniform random bytes as a hexadecimal string
+# uniform random bytes as a hexadecimal string
 rcrypto(16, type = 'chr')
-# cryptographically random logical values
+# random logical values
 rcrypto(16, type = 'lgl')
-# cryptographically random uniform random integers
+# uniform random integers
 rcrypto(16, type = 'int')
-# cryptographically random uniform random doubles in the range [0, 1]
+# uniform random doubles in the range [0, 1]
 rcrypto(16, type = 'dbl')
 ```
 

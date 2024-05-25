@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `{cryptorng}` Generate random bytes from your OS cryptographically secure RNG
+# Generate random numbers from your OS cryptographically secure RNG
 
 <!-- badges: start -->
 
@@ -10,11 +10,12 @@
 [![R-CMD-check](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/coolbutuseless/cryptorng/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`{cryptorng}` provides access to OS-provided [cryptographically secure
-pseudorandom number generators
+`{cryptorng}` provides access to your operating system’s
+[cryptographically secure pseudorandom number generator
 (CSPRNG)](https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator).
 
-**Summary:** OS-provided CSPRNGs provide high-quality random bytes.
+System CSPRNGs provide high-quality, uniform random bytes which are
+secure against cryptographic analysis.
 
 These bytes are suitable for use in other crypographic processes e.g.
 
@@ -27,48 +28,52 @@ These bytes are suitable for use in other crypographic processes e.g.
   PCs which don’t have specialist RNG hardware.  
 - There’s no seed to set (the OS sets that internally using accumulated
   system entropy)
+  - Depending on your system, the CSPRNG may be continually re-seeded as
+    more entropy becomes available.
 - Multiple threads in parallel won’t read the same bytes.
+
+#### How can I generate random values sampled from a uniform distribution?
 
 ``` r
 library(cryptorng)
-# cryptographically random uniform random bytes
+# uniform random bytes
 rcrypto(16)
 ```
 
-    #>  [1] 14 52 2c 66 1b 35 b7 83 e3 a2 f5 36 77 bf 59 1a
+    #>  [1] 03 e5 ec fb 01 f5 38 1e 0f 28 13 9e 06 0e cd 84
 
 ``` r
-# cryptographically random uniform random bytes as a hexadecimal string
+# uniform random bytes as a hexadecimal string
 rcrypto(16, type = 'chr')
 ```
 
-    #> [1] "85fb1f88a0c8ead27b1680b5b3c14f1a"
+    #> [1] "14fc22debac9d0de928561926f58eca0"
 
 ``` r
-# cryptographically random logical values
+# random logical values
 rcrypto(16, type = 'lgl')
 ```
 
-    #>  [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE
-    #> [13] FALSE  TRUE  TRUE  TRUE
+    #>  [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
+    #> [13] FALSE FALSE  TRUE  TRUE
 
 ``` r
-# cryptographically random uniform random integers
+# uniform random integers
 rcrypto(16, type = 'int')
 ```
 
-    #>  [1]  -921500885  1699045642 -1757214437   162988660  1881853527  -455888035
-    #>  [7] -1147275280   -32980123  -613675724 -1318587285   200376975 -1976661872
-    #> [13] -1295291376 -2040368678   548665066   799597105
+    #>  [1]   489516141  -856896235   733113486 -2130547521 -1450340903 -1422768953
+    #>  [7]  -570010533  -109067890  1018099482  -353512362 -1405180125  1990253432
+    #> [13] -1549119415 -2018685187  1343142485   849416054
 
 ``` r
-# cryptographically random uniform random doubles in the range [0, 1]
+# uniform random doubles in the range [0, 1]
 rcrypto(16, type = 'dbl')
 ```
 
-    #>  [1] 0.9817417 0.1332365 0.2227557 0.9046320 0.4403960 0.7514096 0.7229504
-    #>  [8] 0.7272749 0.4014156 0.5157457 0.9635036 0.8342329 0.9370813 0.5226229
-    #> [15] 0.3949592 0.1755212
+    #>  [1] 0.4638946 0.9771033 0.6738654 0.1340460 0.4392869 0.9761877 0.3880248
+    #>  [8] 0.2887919 0.5000732 0.6997343 0.2752728 0.4783295 0.2563337 0.3850485
+    #> [15] 0.6932684 0.8672765
 
 ## Installation
 

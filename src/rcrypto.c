@@ -73,7 +73,7 @@ void rcrypto(void *buf, size_t n) {
   size_t status = (size_t)BCryptGenRandom( NULL, ( PUCHAR ) buf, n, BCRYPT_USE_SYSTEM_PREFERRED_RNG );
   // Return value is 'NTSTATUS' value. STATUS_SUCCESS = 0.
   if (status != 0) {
-    error("cryptorng_windows() error: Status = %zu.\n", status);
+    error("rcrypto() windows error: Status = %zu.\n", status);
   }
   
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,11 +82,11 @@ void rcrypto(void *buf, size_t n) {
 #elif defined(__linux__)
   long status = (long)syscall( SYS_getrandom, buf, n, 0 );
   if (status < 0 || status != n) {
-    error("cryptorng_linux() error: Status = %zu.\n", status);
+    error("rcrypto() linux error: Status = %zu.\n", status);
   }
   
 #else
-#error no secrure rcrypto() implemented for this platform
+#error no secure rcrypto() implemented for this platform
 #endif 
 }
 

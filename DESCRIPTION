@@ -8,9 +8,8 @@ Authors@R: c(
 Maintainer: Mike Cheng <mikefc@coolbutuseless.com>
 Description: Generate random numbers from the Cryptographically Secure Pseudorandom 
     Number Generator (CSPRNG) provided by the underlying operating system.  
-    These system CSPRNGs are seeded internally by the OS with entropy it gathers
-    from the system hardware. The random number generation algorithms are considered 
-    cryptographically secure.  The following system functions are used:
+    System CSPRNGs are seeded internally by the OS with entropy it gathers
+    from the system hardware. The following system functions are used:
     arc4random_buf() on macOS and BSD; BCryptgenRandom() on Windows; 
     Sys_getrandom() on Linux.
 License: MIT + file LICENSE
