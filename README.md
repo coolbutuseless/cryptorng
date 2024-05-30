@@ -40,40 +40,40 @@ library(cryptorng)
 rcrypto(16)
 ```
 
-    #>  [1] 03 e5 ec fb 01 f5 38 1e 0f 28 13 9e 06 0e cd 84
+    #>  [1] 9d 29 5b 9a 4f 7c fd 4a 1e f1 c1 e1 54 34 30 1d
 
 ``` r
 # uniform random bytes as a hexadecimal string
 rcrypto(16, type = 'chr')
 ```
 
-    #> [1] "14fc22debac9d0de928561926f58eca0"
+    #> [1] "95b9bbed52bb1178797488ede2905a43"
 
 ``` r
 # random logical values
 rcrypto(16, type = 'lgl')
 ```
 
-    #>  [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
-    #> [13] FALSE FALSE  TRUE  TRUE
+    #>  [1] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
+    #> [13] FALSE FALSE FALSE FALSE
 
 ``` r
 # uniform random integers
 rcrypto(16, type = 'int')
 ```
 
-    #>  [1]   489516141  -856896235   733113486 -2130547521 -1450340903 -1422768953
-    #>  [7]  -570010533  -109067890  1018099482  -353512362 -1405180125  1990253432
-    #> [13] -1549119415 -2018685187  1343142485   849416054
+    #>  [1] -1462110675  -149265429    24479471 -1108190907   891595010   786375080
+    #>  [7]  2062005447    56916768  1845302616  -852269330 -2093358023    43116425
+    #> [13]  1853964883  1208525937 -1385749686   670879908
 
 ``` r
-# uniform random doubles in the range [0, 1]
+# uniform random doubles in the range [0, 1)
 rcrypto(16, type = 'dbl')
 ```
 
-    #>  [1] 0.4638946 0.9771033 0.6738654 0.1340460 0.4392869 0.9761877 0.3880248
-    #>  [8] 0.2887919 0.5000732 0.6997343 0.2752728 0.4783295 0.2563337 0.3850485
-    #> [15] 0.6932684 0.8672765
+    #>  [1] 0.6866093 0.1157316 0.4953703 0.5625702 0.8608402 0.7837645 0.9046331
+    #>  [8] 0.9356881 0.2529249 0.6325323 0.2894815 0.7857760 0.2388977 0.8496769
+    #> [15] 0.2457765 0.4280983
 
 ## Installation
 

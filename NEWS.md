@@ -1,4 +1,8 @@
 
+# cryptorng 0.1.3.9000 2024-05-31
+
+* Fix mis-specified function declarations picked up by CRAN LTO checks
+
 # cryptorng 0.1.3  2024-05-25
 
 * `rcrypto()` now supports more return types:

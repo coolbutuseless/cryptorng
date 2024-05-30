@@ -54,7 +54,7 @@ rcrypto(16, type = 'chr')
 rcrypto(16, type = 'lgl')
 # uniform random integers
 rcrypto(16, type = 'int')
-# uniform random doubles in the range [0, 1]
+# uniform random doubles in the range [0, 1)
 rcrypto(16, type = 'dbl')
 ```
 

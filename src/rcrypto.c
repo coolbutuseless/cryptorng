@@ -94,7 +94,7 @@ void rcrypto(void *buf, size_t n) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get random bytes from the system RNG  (R Callable)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP rcrypto_raw_(SEXP n_, SEXP type_) {
+SEXP rcrypto_raw_(SEXP n_) {
   
   if (asInteger(n_) <= 0) {
     error("rcrypto_(): 'n' must be a positive integer");
@@ -113,7 +113,7 @@ SEXP rcrypto_raw_(SEXP n_, SEXP type_) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get random bytes from the system RNG as hexadecimal string
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP rcrypto_chr_(SEXP n_, SEXP type_) {
+SEXP rcrypto_chr_(SEXP n_) {
   
   if (asInteger(n_) <= 0) {
     error("rcrypto_(): 'n' must be a positive integer");
@@ -142,7 +142,7 @@ SEXP rcrypto_chr_(SEXP n_, SEXP type_) {
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Get random bytes from the system RNG  as logical values
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SEXP rcrypto_lgl_(SEXP n_, SEXP type_) {
+SEXP rcrypto_lgl_(SEXP n_) {
   
   if (asInteger(n_) <= 0) {
     error("rcrypto_(): 'n' must be a positive integer");

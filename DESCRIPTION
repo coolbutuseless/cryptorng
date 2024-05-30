@@ -1,7 +1,7 @@
 Package: cryptorng
 Type: Package
 Title: Access System Cryptographic Pseudorandom Number Generators
-Version: 0.1.3
+Version: 0.1.3.9000
 Authors@R: c(
     person("Mike", "Cheng", role = c("aut", "cre", 'cph'), email = "mikefc@coolbutuseless.com")
     )
