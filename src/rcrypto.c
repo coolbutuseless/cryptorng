@@ -202,7 +202,7 @@ SEXP rcrypto_int_(SEXP n_) {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Get random floats in the range [0, 1]
+// Get random floats in the range [0, 1)
 //
 // @param n_ number of floats
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,7 +218,7 @@ SEXP rcrypto_dbl_(SEXP n_) {
   
   rcrypto((void *)dptr, n * sizeof(double));
   
-  // Convert 64-bit unsigned integer to double in range [0, 1]
+  // Convert 64-bit unsigned integer to double in range [0, 1)
   // Like xoroshiro does: https://prng.di.unimi.it/
   for (size_t i = 0; i < n; i++) {
     dptr[i] = (double)(iptr[i] >> 11) * 0x1.0p-53;

@@ -10,7 +10,7 @@
     * `chr` hexadecimal string
     * `lgl` random logical values
     * `int` uniform random integers
-    * `dbl` uniform random doubles in the range [0, 1]
+    * `dbl` uniform random doubles in the range [0, 1)
 
 # cryptorng 0.1.2  2024-04-28
 

@@ -15,7 +15,7 @@
 #'          \item{'lgl'}{Uniform random bytes return as random logical values}
 #'          \item{'int'}{Combines 4 random bytes to create uniform random integers.  This output is
 #'                       further filtered to remove any NA values which may occur}
-#'          \item{'dbl'}{Combines 8 random bytes to create uniform random numbers in the range [0, 1]}
+#'          \item{'dbl'}{Combines 8 random bytes to create uniform random numbers in the range [0, 1)}
 #'        }
 #' 
 #' 
