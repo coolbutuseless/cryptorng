@@ -1,5 +1,5 @@
 
-# cryptorng 0.1.3.9000 2024-05-31
+# cryptorng 0.1.4 2024-05-31
 
 * Fix mis-specified function declarations picked up by CRAN LTO checks
 
